@@ -1,0 +1,115 @@
+{
+  "version": 6,
+  "include": [
+    "vcpkg.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "conf-common",
+      "inherits": [
+        "vcpkg"
+      ],
+      "description": "General settings that apply to all configurations",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_UNITY_BUILD": "ON",
+        "UNITY_BUILD_BATCH_SIZE": "10"
+      }
+    },
+    {
+      "name": "conf-windows-common",
+      "description": "Windows settings for MSBuild toolchain that apply to msvc and clang",
+      "hidden": true,
+      "inherits": "conf-common",
+      "environment": {},
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_CXX_COMPILER": "cl"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "toolset": {
+        "value": "host=x64",
+        "strategy": "external"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "windows-msvc-x64"
+        }
+      }
+    },
+    {
+      "name": "conf-unixlike-common",
+      "description": "Unix-like OS settings for gcc and clang toolchains",
+      "hidden": true,
+      "inherits": "conf-common",
+      "condition": {
+        "type": "inList",
+        "string": "${hostSystemName}",
+        "list": [
+          "Linux",
+          "Darwin"
+        ]
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+          "sourceDir": "$env{HOME}/{{project_name}}",
+          "copySourcesOptions": {
+            "exclusionList": [
+              ".vs",
+              ".git",
+              "out",
+              "vcpkg"
+            ]
+          },
+          "copyOptimizations": {
+            "useOptimizations": "RsyncOnly"
+          }
+        }
+      },
+      "environment": {}
+    },
+    {
+      "name": "conf-gcc-common",
+      "description": "Unix-like OS settings for gcc",
+      "hidden": true,
+      "inherits": "conf-unixlike-common",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "conf-testing",
+      "hidden": true,
+      "cacheVariables": {
+        "BUILD_TESTING": "ON"
+      }
+    },
+    {
+      "name": "conf-debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "conf-release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+# questions
+project_name:
+    type: str
+    help: What is your project name?
+
+version_number:
+    type: str
+    help: What is your initial version?
+    default: 0.0.1
+    

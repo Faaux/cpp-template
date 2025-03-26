@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.23)
+
+project({{project_name}} VERSION 0.1.0)
+
+include(cmake/Cake.cmake)
+
+cake_init()
+
+cake_add_folder(FOLDER code RECURSIVE)
+
+
+include(cmake/PackageProject.cmake)
+cake_package_project(
+  TARGETS
+  {{project_name}})

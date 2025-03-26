@@ -1,0 +1,179 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 28,
+    "patch": 0
+  },
+  "include": [
+    "cmake/presets/base.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "ninja-msvc-debug",
+      "displayName": "ninja-msvc-debug",
+      "description": "Target Windows with the msvc compiler, debug build type",
+      "inherits": [
+        "conf-windows-common",
+        "conf-debug",
+        "conf-testing"
+      ]
+    },
+    {
+      "name": "ninja-msvc-release",
+      "displayName": "ninja-msvc-release",
+      "description": "Target Windows with the msvc compiler, release build type",
+      "inherits": [
+        "conf-windows-common",
+        "conf-release",
+        "conf-testing"
+      ]
+    },
+    {
+      "name": "ninja-gcc-debug",
+      "displayName": "ninja-gcc-debug",
+      "description": "Target Unix-like OS with the gcc compiler, debug build type",
+      "inherits": [
+        "conf-gcc-common",
+        "conf-debug",
+        "conf-testing"
+      ]
+    },
+    {
+      "name": "ninja-gcc-release",
+      "displayName": "ninja-gcc-release",
+      "description": "Target Unix-like OS with the gcc compiler, release build type",
+      "inherits": [
+        "conf-gcc-common",
+        "conf-release",
+        "conf-testing"
+      ]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "msvc-debug",
+      "configurePreset": "ninja-msvc-debug"
+    },
+    {
+      "name": "msvc-release",
+      "configurePreset": "ninja-msvc-release"
+    },
+    {
+      "name": "gcc-debug",
+      "configurePreset": "ninja-gcc-debug"
+    },
+    {
+      "name": "gcc-release",
+      "configurePreset": "ninja-gcc-release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "common",
+      "description": "Test CMake settings that apply to all configurations",
+      "hidden": true,
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "ignore",
+        "stopOnFailure": false
+      }
+    },
+    {
+      "name": "msvc-debug",
+      "inherits": "common",
+      "configurePreset": "ninja-msvc-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "msvc-release",
+      "inherits": "common",
+      "configurePreset": "ninja-msvc-release",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "gcc-debug",
+      "inherits": "common",
+      "configurePreset": "ninja-gcc-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "gcc-release",
+      "inherits": "common",
+      "configurePreset": "ninja-gcc-release",
+      "configuration": "RelWithDebInfo"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "ninja-msvc-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ninja-msvc-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "test",
+          "name": "msvc-debug"
+        }
+      ]
+    },
+    {
+      "name": "ninja-msvc-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ninja-msvc-release"
+        },
+        {
+          "type": "build",
+          "name": "msvc-release"
+        },
+        {
+          "type": "test",
+          "name": "msvc-release"
+        }
+      ]
+    },
+    {
+      "name": "ninja-gcc-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ninja-gcc-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc-debug"
+        },
+        {
+          "type": "test",
+          "name": "gcc-debug"
+        }
+      ]
+    },
+    {
+      "name": "ninja-gcc-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ninja-gcc-release"
+        },
+        {
+          "type": "build",
+          "name": "gcc-release"
+        },
+        {
+          "type": "test",
+          "name": "gcc-release"
+        }
+      ]
+    }
+  ]
+}
