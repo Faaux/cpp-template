@@ -32,7 +32,8 @@ macro(_cake_setup_options)
   option(_cake_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
   option(_cake_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
   option(_cake_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
-  option(_cake_ENABLE_CACHE "Enable ccache" ON)
+  option(_cake_ENABLE_CACHE "Enable sccache" ON)
+  option(_cake_ENABLE_IWYU "Enable include-whay-you-use" OFF)
 
   if(NOT PROJECT_IS_TOP_LEVEL)
     mark_as_advanced(
@@ -44,7 +45,8 @@ macro(_cake_setup_options)
       _cake_ENABLE_SANITIZER_UNDEFINED
       _cake_ENABLE_SANITIZER_THREAD
       _cake_ENABLE_SANITIZER_MEMORY
-      _cake_ENABLE_CACHE)
+      _cake_ENABLE_CACHE
+      _cake_ENABLE_IWYU)
   endif()
 
 endmacro()
@@ -57,6 +59,11 @@ macro(_cake_global_options)
   endif()
 
   _cake_supports_sanitizers()
+
+  if(_cake_ENABLE_IWYU)
+    include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/StaticAnalyzers.cmake)
+    _cake_enable_iwyu()
+  endif()
 endmacro()
 
 macro(_cake_local_options)

@@ -1,52 +1,25 @@
 name: conan-docker-tools-modern
 
 x-common-args: &common-args
-  CMAKE_VERSION: ${CMAKE_VERSION}
-  LIBSTDCPP_VERSION: ${LIBSTDCPP_VERSION}
-  LIBSTDCPP_PATCH_VERSION: ${LIBSTDCPP_PATCH_VERSION}
-  DOCKER_USERNAME: ${DOCKER_USERNAME}
-  DOCKER_TAG: ${DOCKER_TAG}
-  DISTRO: ${DISTRO}
   DISTRO_VERSION: ${DISTRO_VERSION}
-  USERNAME: ${USERNAME}
-
-x-gcc: &gcc
+  NINJA_VERSION: ${NINJA_VERSION}
+  CMAKE_VERSION: ${CMAKE_VERSION}
   GCC_VERSION: ${GCC_VERSION}
-
-x-llvm: &llvm
   CLANG_VERSION: ${CLANG_VERSION}
+  USERNAME: ${USERNAME}
+  USER_UID: ${USER_UID}
+  USER_GID: ${USER_GID}
+  DOCKER_USERNAME: ${DOCKER_USERNAME}
 
 services:
     # Base image
-  base:
-    platform: ${PLATFORM}
-    build:
-      context: base
-      dockerfile: Dockerfile
-      args:
-        <<: *common-args
-    image: ${DOCKER_USERNAME}/base-${DISTRO}:${DOCKER_TAG}
-    container_name: base
-    tty: true
-
-  gcc:
-    platform: ${PLATFORM}
-    build:
-      context: gcc
-      dockerfile: Dockerfile
-      args:
-        <<: [*common-args, *gcc]
-    image: ${DOCKER_USERNAME}/gcc-${DISTRO}:${DOCKER_TAG}
-    container_name: gcc
-    tty: true
-
   clang_gcc:
     platform: ${PLATFORM}
     build:
       context: clang_gcc
       dockerfile: Dockerfile
       args:
-        <<: [*common-args, *llvm]
-    image: ${DOCKER_USERNAME}/clang_gcc-${DISTRO}:${DOCKER_TAG}
+        <<: *common-args
+    image: ${DOCKER_USERNAME}/clang_gcc-ubuntu:${CLANG_VERSION}-${GCC_VERSION}
     container_name: clang_gcc
     tty: true
