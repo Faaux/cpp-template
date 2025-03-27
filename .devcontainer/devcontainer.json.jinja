@@ -1,0 +1,18 @@
+{
+  "name": "{{project_name}}",
+  "image": "{{project_name}}/clang_gcc-ubuntu24.04",
+  "capAdd": [
+    "SYS_PTRACE"
+  ],
+  "securityOpt": [
+    "seccomp=unconfined"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cmake-tools"
+      ]
+    }
+  },
+  "containerUser": "bob"
+}

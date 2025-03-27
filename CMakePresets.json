@@ -48,6 +48,26 @@
         "conf-release",
         "conf-testing"
       ]
+    },
+    {
+      "name": "ninja-clang-debug",
+      "displayName": "ninja-clang-debug",
+      "description": "Target Unix-like OS with the clang compiler, debug build type",
+      "inherits": [
+        "conf-clang-common",
+        "conf-debug",
+        "conf-testing"
+      ]
+    },
+    {
+      "name": "ninja-clang-release",
+      "displayName": "ninja-clang-release",
+      "description": "Target Unix-like OS with the clang compiler, release build type",
+      "inherits": [
+        "conf-clang-common",
+        "conf-release",
+        "conf-testing"
+      ]
     }
   ],
   "buildPresets": [
@@ -66,6 +86,14 @@
     {
       "name": "gcc-release",
       "configurePreset": "ninja-gcc-release"
+    },
+    {
+      "name": "clang-debug",
+      "configurePreset": "ninja-clang-debug"
+    },
+    {
+      "name": "clang-release",
+      "configurePreset": "ninja-clang-release"
     }
   ],
   "testPresets": [
@@ -103,6 +131,18 @@
       "name": "gcc-release",
       "inherits": "common",
       "configurePreset": "ninja-gcc-release",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "clang-debug",
+      "inherits": "common",
+      "configurePreset": "ninja-clang-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "clang-release",
+      "inherits": "common",
+      "configurePreset": "ninja-clang-release",
       "configuration": "RelWithDebInfo"
     }
   ],
@@ -172,6 +212,40 @@
         {
           "type": "test",
           "name": "gcc-release"
+        }
+      ]
+    },
+    {
+      "name": "ninja-clang-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ninja-clang-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-debug"
+        }
+      ]
+    },
+    {
+      "name": "ninja-clang-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ninja-clang-release"
+        },
+        {
+          "type": "build",
+          "name": "clang-release"
+        },
+        {
+          "type": "test",
+          "name": "clang-release"
         }
       ]
     }

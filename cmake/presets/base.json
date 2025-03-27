@@ -91,6 +91,16 @@
       }
     },
     {
+      "name": "conf-clang-common",
+      "description": "Unix-like OS settings for clang",
+      "hidden": true,
+      "inherits": "conf-unixlike-common",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
       "name": "conf-testing",
       "hidden": true,
       "cacheVariables": {
