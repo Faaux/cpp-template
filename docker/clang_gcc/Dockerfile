@@ -17,12 +17,12 @@ RUN sudo apt-get -qq update \
 
 RUN wget -q --no-check-certificate https://apt.llvm.org/llvm.sh \
     && chmod +x llvm.sh \
-    && sudo ./llvm.sh 20 all
+    && sudo ./llvm.sh 19 all
 
-RUN sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-20 10 \
-    && sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-20 10 \
-    && sudo update-alternatives --install /usr/local/bin/cc cc /usr/bin/clang-20 20 \
-    && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/bin/clang++-20 20 \
-    && sudo update-alternatives --install /usr/local/bin/ld ld /usr/bin/ld.lld-20 20 \
+RUN sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-19 10 \
+    && sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-19 10 \
+    && sudo update-alternatives --install /usr/local/bin/cc cc /usr/bin/clang-19 20 \
+    && sudo update-alternatives --install /usr/local/bin/c++ c++ /usr/bin/clang++-19 20 \
+    && sudo update-alternatives --install /usr/local/bin/ld ld /usr/bin/ld.lld-19 20 \
     && sudo rm /etc/ld.so.cache \
     && sudo ldconfig -C /etc/ld.so.cache
