@@ -41,11 +41,7 @@ macro(_cake_cleanup_args)
   foreach(oneValue ${oneValueArgs})
     if(ARGS_${oneValue})
 
-      list(
-        FIND
-        cake_argn
-        ${oneValue}
-        oneValueIndex)
+      list(FIND cake_argn ${oneValue} oneValueIndex)
 
       list(REMOVE_AT cake_argn ${oneValueIndex})
       list(REMOVE_AT cake_argn ${oneValueIndex})
@@ -55,11 +51,7 @@ macro(_cake_cleanup_args)
   foreach(multiValue ${multiValueArgs})
     if(ARGS_${multiValue})
 
-      list(
-        FIND
-        cake_argn
-        ${multiValue}
-        multiValueIndex)
+      list(FIND cake_argn ${multiValue} multiValueIndex)
 
       list(REMOVE_AT cake_argn ${multiValueIndex})
 
@@ -75,12 +67,8 @@ function(_cake_add_folder_impl)
   set(options RECURSIVE)
   set(oneValueArgs FOLDER ROOT)
   set(multiValueArgs)
-  cmake_parse_arguments(
-    ARGS
-    "${options}"
-    "${oneValueArgs}"
-    "${multiValueArgs}"
-    ${ARGN})
+  cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}"
+                        ${ARGN})
 
   _cake_cleanup_args(${ARGN})
 
@@ -92,16 +80,11 @@ function(_cake_add_folder_impl)
     cake_error("Missing 'FOLDER' argument")
   endif()
 
-  cmake_path(
-    APPEND
-    ARGS_ROOT
-    ${ARGS_FOLDER}
-    OUTPUT_VARIABLE
-    ARGS_FOLDER)
+  cmake_path(APPEND ARGS_ROOT ${ARGS_FOLDER} OUTPUT_VARIABLE ARGS_FOLDER)
 
-  set(FOLDER_TO_ADD )
-  set(LIBS )
-  set(FOLDER_TO_CHECK )
+  set(FOLDER_TO_ADD)
+  set(LIBS)
+  set(FOLDER_TO_CHECK)
 
   # Find all folders that we need to add
   list(APPEND FOLDER_TO_CHECK "${ARGS_FOLDER}")
@@ -123,11 +106,11 @@ function(_cake_add_folder_impl)
   endwhile()
 
   # Build dependency list from folders to add
-  set(UNKNOWN_DEPS )
+  set(UNKNOWN_DEPS)
   foreach(folder ${FOLDER_TO_ADD})
     cmake_path(GET folder FILENAME libname)
 
-    set("DEPS_${libname}" )
+    set("DEPS_${libname}")
 
     # Find all dependency files
     file(
@@ -139,7 +122,12 @@ function(_cake_add_folder_impl)
       file(STRINGS "${dep_file}" deps)
       foreach(line ${deps})
         set(whitespace "[ \t\r\n]*")
-        string(REGEX MATCH "^${whitespace}find_package${whitespace}\\(${whitespace}([a-zA-Z0-9_-]+)" match "${line}")
+        string(
+          REGEX
+            MATCH
+            "^${whitespace}find_package${whitespace}\\(${whitespace}([a-zA-Z0-9_-]+)"
+            match
+            "${line}")
         if(match)
           if(${CMAKE_MATCH_1} IN_LIST LIBS)
             list(APPEND "DEPS_${libname}" "${CMAKE_MATCH_1}")
@@ -153,7 +141,7 @@ function(_cake_add_folder_impl)
 
   # Now that we have all deps, start adding folders in the correct order
   while(FOLDER_TO_ADD)
-    set(ADDED_TARGETS )
+    set(ADDED_TARGETS)
 
     # Find targets without any other dependencies
     foreach(candidate ${FOLDER_TO_ADD})
@@ -196,12 +184,8 @@ function(cake_add_folder)
   set(options RECURSIVE)
   set(oneValueArgs FOLDER)
   set(multiValueArgs)
-  cmake_parse_arguments(
-    ARGS
-    "${options}"
-    "${oneValueArgs}"
-    "${multiValueArgs}"
-    ${ARGN})
+  cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}"
+                        ${ARGN})
 
   if(NOT ARGS_FOLDER)
     cake_error("Missing 'FOLDER' argument")
@@ -211,12 +195,8 @@ function(cake_add_folder)
     set(ARGS RECURSIVE)
   endif()
 
-  _cake_add_folder_impl(
-    FOLDER
-    ${ARGS_FOLDER}
-    ROOT
-    ${CMAKE_CURRENT_LIST_DIR}
-    ${ARGS})
+  _cake_add_folder_impl(FOLDER ${ARGS_FOLDER} ROOT ${CMAKE_CURRENT_LIST_DIR}
+                        ${ARGS})
 
 endfunction()
 
@@ -228,8 +208,8 @@ function(cake_init)
   include(CMakePackageConfigHelpers)
   include(GNUInstallDirs)
 
-  # Opinonated Settings of Cake
-  # Heavily inspired by: https://github.com/cpp-best-practices/cmake_template
+  # Opinonated Settings of Cake Heavily inspired by:
+  # https://github.com/cpp-best-practices/cmake_template
   if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 23)
   endif()
@@ -334,20 +314,12 @@ endmacro()
 function(_cake_assign_source_group)
   foreach(_source IN ITEMS ${ARGN})
     if(IS_ABSOLUTE "${_source}")
-      file(
-        RELATIVE_PATH
-        _source_rel
-        "${CMAKE_CURRENT_SOURCE_DIR}"
-        "${_source}")
+      file(RELATIVE_PATH _source_rel "${CMAKE_CURRENT_SOURCE_DIR}" "${_source}")
     else()
       set(_source_rel "${_source}")
     endif()
     get_filename_component(_source_path "${_source_rel}" PATH)
-    string(
-      REPLACE "/"
-              "\\"
-              _source_path_msvc
-              "${_source_path}")
+    string(REPLACE "/" "\\" _source_path_msvc "${_source_path}")
     source_group("${_source_path_msvc}" FILES "${_source}")
   endforeach()
 endfunction()
@@ -360,12 +332,8 @@ function(cake_add_executable TARGET_NAME)
   set(options)
   set(oneValueArgs)
   set(multiValueArgs)
-  cmake_parse_arguments(
-    ARGS
-    "${options}"
-    "${oneValueArgs}"
-    "${multiValueArgs}"
-    ${ARGN})
+  cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}"
+                        ${ARGN})
 
   _cake_cleanup_args()
 
@@ -390,16 +358,13 @@ function(cake_add_executable TARGET_NAME)
   add_executable(${TARGET_NAME} ${cake_argn} ${PUBLIC_HEADERS} ${SOURCES})
 
   if(CXX_SOURCES)
-    target_sources(
-      ${TARGET_NAME}
-      PUBLIC FILE_SET
-             CXX_MODULES
-             FILES
-             ${CXX_SOURCES})
+    target_sources(${TARGET_NAME} PUBLIC FILE_SET CXX_MODULES FILES
+                                         ${CXX_SOURCES})
   endif()
 
   # Set RPATH for Linux
-  set_target_properties(${TARGET_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN/${CMAKE_INSTALL_LIBDIR}")
+  set_target_properties(
+    ${TARGET_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN/${CMAKE_INSTALL_LIBDIR}")
 
   _cake_add_common_parts(${TARGET_NAME})
 endfunction()
@@ -412,12 +377,8 @@ function(cake_add_library TARGET_NAME)
   set(options)
   set(oneValueArgs)
   set(multiValueArgs)
-  cmake_parse_arguments(
-    ARGS
-    "${options}"
-    "${oneValueArgs}"
-    "${multiValueArgs}"
-    ${ARGN})
+  cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}"
+                        ${ARGN})
 
   _cake_cleanup_args()
 
@@ -443,12 +404,8 @@ function(cake_add_library TARGET_NAME)
   add_library(${TARGET_NAME}::${TARGET_NAME} ALIAS ${TARGET_NAME})
 
   if(CXX_SOURCES)
-    target_sources(
-      ${TARGET_NAME}
-      PUBLIC FILE_SET
-             CXX_MODULES
-             FILES
-             ${CXX_SOURCES})
+    target_sources(${TARGET_NAME} PUBLIC FILE_SET CXX_MODULES FILES
+                                         ${CXX_SOURCES})
   endif()
 
   target_sources(
@@ -466,8 +423,10 @@ function(cake_add_library TARGET_NAME)
 
   get_target_property(type ${TARGET_NAME} TYPE)
   if(${type} STREQUAL "INTERFACE_LIBRARY")
-    target_include_directories(${TARGET_NAME} INTERFACE $<INSTALL_INTERFACE:include>)
+    target_include_directories(${TARGET_NAME}
+                               INTERFACE $<INSTALL_INTERFACE:include>)
   else()
-    target_include_directories(${TARGET_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
+    target_include_directories(${TARGET_NAME}
+                               PUBLIC $<INSTALL_INTERFACE:include>)
   endif()
 endfunction()

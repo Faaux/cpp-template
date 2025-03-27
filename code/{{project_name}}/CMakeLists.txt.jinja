@@ -2,6 +2,4 @@ cmake_minimum_required(VERSION 3.28)
 
 cake_add_executable({{project_name}})
 
-target_link_libraries(
-  {{project_name}}
-  PRIVATE fmt::fmt {{project_name}}Lib::{{project_name}}Lib)
+target_link_libraries({{project_name}} PRIVATE fmt::fmt {{project_name}}Lib::{{project_name}}Lib)

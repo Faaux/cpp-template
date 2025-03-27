@@ -6,7 +6,8 @@ function(
   ENABLE_SANITIZER_UNDEFINED_BEHAVIOR
   ENABLE_SANITIZER_THREAD
   ENABLE_SANITIZER_MEMORY)
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES
+                                             ".*Clang")
     set(SANITIZERS "")
 
     if(${ENABLE_SANITIZER_ADDRESS})
@@ -23,7 +24,10 @@ function(
 
     if(${ENABLE_SANITIZER_THREAD})
       if("address" IN_LIST SANITIZERS OR "leak" IN_LIST SANITIZERS)
-        message(WARNING "Thread sanitizer does not work with Address and Leak sanitizer enabled")
+        message(
+          WARNING
+            "Thread sanitizer does not work with Address and Leak sanitizer enabled"
+        )
       else()
         list(APPEND SANITIZERS "thread")
       endif()
@@ -38,7 +42,9 @@ function(
          OR "thread" IN_LIST SANITIZERS
          OR "leak" IN_LIST SANITIZERS)
         message(
-          WARNING "Memory sanitizer does not work with Address, Thread or Leak sanitizer enabled")
+          WARNING
+            "Memory sanitizer does not work with Address, Thread or Leak sanitizer enabled"
+        )
       else()
         list(APPEND SANITIZERS "memory")
       endif()
@@ -55,22 +61,17 @@ function(
     endif()
   endif()
 
-  list(
-    JOIN
-    SANITIZERS
-    ","
-    LIST_OF_SANITIZERS)
+  list(JOIN SANITIZERS "," LIST_OF_SANITIZERS)
 
   if(LIST_OF_SANITIZERS)
-    if(NOT
-       "${LIST_OF_SANITIZERS}"
-       STREQUAL
-       "")
-       cake_log("Enabling Sanitizers: ${LIST_OF_SANITIZERS}")
+    if(NOT "${LIST_OF_SANITIZERS}" STREQUAL "")
+      cake_log("Enabling Sanitizers: ${LIST_OF_SANITIZERS}")
 
       if(NOT MSVC)
-        target_compile_options(${project_name} INTERFACE -fsanitize=${LIST_OF_SANITIZERS})
-        target_link_options(${project_name} INTERFACE -fsanitize=${LIST_OF_SANITIZERS})
+        target_compile_options(${project_name}
+                               INTERFACE -fsanitize=${LIST_OF_SANITIZERS})
+        target_link_options(${project_name} INTERFACE
+                            -fsanitize=${LIST_OF_SANITIZERS})
       else()
         string(FIND "$ENV{PATH}" "$ENV{VSINSTALLDIR}" index_of_vs_install_dir)
         if("${index_of_vs_install_dir}" STREQUAL "-1")
@@ -80,14 +81,17 @@ function(
           )
         endif()
         if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-          target_compile_options(${project_name} INTERFACE -fsanitize=${LIST_OF_SANITIZERS} /Zi
-                                                           /INCREMENTAL:NO)
+          target_compile_options(
+            ${project_name} INTERFACE -fsanitize=${LIST_OF_SANITIZERS} /Zi
+                                      /INCREMENTAL:NO)
         else()
-          target_compile_options(${project_name} INTERFACE /fsanitize=${LIST_OF_SANITIZERS} /Zi
-                                                           /INCREMENTAL:NO)
+          target_compile_options(
+            ${project_name} INTERFACE /fsanitize=${LIST_OF_SANITIZERS} /Zi
+                                      /INCREMENTAL:NO)
         endif()
-        target_compile_definitions(${project_name} INTERFACE _DISABLE_VECTOR_ANNOTATION
-                                                             _DISABLE_STRING_ANNOTATION)
+        target_compile_definitions(
+          ${project_name} INTERFACE _DISABLE_VECTOR_ANNOTATION
+                                    _DISABLE_STRING_ANNOTATION)
         target_link_options(${project_name} INTERFACE /INCREMENTAL:NO)
       endif()
     endif()

@@ -3,7 +3,8 @@ include("${CMAKE_CURRENT_LIST_DIR}/Utilities.cmake")
 macro(detect_architecture)
   # detect the architecture
   string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CMAKE_SYSTEM_PROCESSOR_LOWER)
-  if(CMAKE_SYSTEM_PROCESSOR_LOWER STREQUAL x86 OR CMAKE_SYSTEM_PROCESSOR_LOWER MATCHES "^i[3456]86$")
+  if(CMAKE_SYSTEM_PROCESSOR_LOWER STREQUAL x86 OR CMAKE_SYSTEM_PROCESSOR_LOWER
+                                                  MATCHES "^i[3456]86$")
     set(VCVARSALL_ARCH x86)
   elseif(
     CMAKE_SYSTEM_PROCESSOR_LOWER STREQUAL x64
@@ -12,14 +13,18 @@ macro(detect_architecture)
     set(VCVARSALL_ARCH x64)
   elseif(CMAKE_SYSTEM_PROCESSOR_LOWER STREQUAL arm)
     set(VCVARSALL_ARCH arm)
-  elseif(CMAKE_SYSTEM_PROCESSOR_LOWER STREQUAL arm64 OR CMAKE_SYSTEM_PROCESSOR_LOWER STREQUAL aarch64)
+  elseif(CMAKE_SYSTEM_PROCESSOR_LOWER STREQUAL arm64
+         OR CMAKE_SYSTEM_PROCESSOR_LOWER STREQUAL aarch64)
     set(VCVARSALL_ARCH arm64)
   else()
     if(CMAKE_HOST_SYSTEM_PROCESSOR)
       set(VCVARSALL_ARCH ${CMAKE_HOST_SYSTEM_PROCESSOR})
     else()
       set(VCVARSALL_ARCH x64)
-      message(STATUS "Unknown architecture CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR_LOWER} - using x64")
+      message(
+        STATUS
+          "Unknown architecture CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR_LOWER} - using x64"
+      )
     endif()
   endif()
 endmacro()
@@ -34,9 +39,7 @@ function(run_vcvarsall)
     find_file(
       VCVARSALL_FILE
       NAMES vcvarsall.bat
-      PATHS "${MSVC_DIR}"
-            "${MSVC_DIR}/.."
-            "${MSVC_DIR}/../.."
+      PATHS "${MSVC_DIR}" "${MSVC_DIR}/.." "${MSVC_DIR}/../.."
             "${MSVC_DIR}/../../../../../../../.."
             "${MSVC_DIR}/../../../../../../.."
       PATH_SUFFIXES "VC/Auxiliary/Build" "Common7/Tools" "Tools")
@@ -46,7 +49,10 @@ function(run_vcvarsall)
       detect_architecture()
 
       # run vcvarsall and print the environment variables
-      message(STATUS "Running `${VCVARSALL_FILE} ${VCVARSALL_ARCH}` to set up the MSVC environment")
+      message(
+        STATUS
+          "Running `${VCVARSALL_FILE} ${VCVARSALL_ARCH}` to set up the MSVC environment"
+      )
       execute_process(
         COMMAND
           "cmd" "/c" ${VCVARSALL_FILE} ${VCVARSALL_ARCH} #
@@ -56,7 +62,8 @@ function(run_vcvarsall)
         OUTPUT_STRIP_TRAILING_WHITESPACE)
 
       # parse the output and get the environment variables string
-      find_substring_by_prefix(VCVARSALL_ENV "VCVARSALL_ENV_START" "${VCVARSALL_OUTPUT}")
+      find_substring_by_prefix(VCVARSALL_ENV "VCVARSALL_ENV_START"
+                               "${VCVARSALL_OUTPUT}")
 
       # set the environment variables
       set_env_from_string("${VCVARSALL_ENV}")

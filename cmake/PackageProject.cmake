@@ -11,25 +11,24 @@ function(cake_package_project)
       VERSION
       # default to semver
       COMPATIBILITY)
-  set(_multiValueArgs # recursively found for the current folder if not specified
+  set(_multiValueArgs # recursively found for the current folder if not
+                      # specified
       TARGETS)
 
-  cmake_parse_arguments(
-    _PackageProject
-    "${_options}"
-    "${_oneValueArgs}"
-    "${_multiValueArgs}"
-    "${ARGN}")
+  cmake_parse_arguments(_PackageProject "${_options}" "${_oneValueArgs}"
+                        "${_multiValueArgs}" "${ARGN}")
 
-  # Set default options
-  # Define GNU standard installation directories such as CMAKE_INSTALL_DATADIR
+  # Set default options Define GNU standard installation directories such as
+  # CMAKE_INSTALL_DATADIR
   include(GNUInstallDirs)
 
   # set default packaged targets
   if(NOT _PackageProject_TARGETS)
     get_all_installable_targets(_PackageProject_TARGETS)
     message(
-      STATUS "package_project: considering ${_PackageProject_TARGETS} as the exported targets")
+      STATUS
+        "package_project: considering ${_PackageProject_TARGETS} as the exported targets"
+    )
   endif()
 
   # default to the name of the project or the given name

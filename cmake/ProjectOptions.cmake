@@ -2,15 +2,15 @@ include(CMakeDependentOption)
 include(CheckCXXCompilerFlag)
 
 macro(_cake_supports_sanitizers)
-  if((CMAKE_CXX_COMPILER_ID MATCHES ".*Clang.*" OR CMAKE_CXX_COMPILER_ID MATCHES ".*GNU.*")
-     AND NOT WIN32)
+  if((CMAKE_CXX_COMPILER_ID MATCHES ".*Clang.*" OR CMAKE_CXX_COMPILER_ID MATCHES
+                                                   ".*GNU.*") AND NOT WIN32)
     set(SUPPORTS_UBSAN ON)
   else()
     set(SUPPORTS_UBSAN OFF)
   endif()
 
-  if((CMAKE_CXX_COMPILER_ID MATCHES ".*Clang.*" OR CMAKE_CXX_COMPILER_ID MATCHES ".*GNU.*")
-     AND WIN32)
+  if((CMAKE_CXX_COMPILER_ID MATCHES ".*Clang.*" OR CMAKE_CXX_COMPILER_ID MATCHES
+                                                   ".*GNU.*") AND WIN32)
     set(SUPPORTS_ASAN OFF)
   else()
     set(SUPPORTS_ASAN ON)
@@ -51,7 +51,8 @@ endmacro()
 
 macro(_cake_global_options)
   if(_cake_ENABLE_IPO)
-    include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/InterproceduralOptimization.cmake)
+    include(
+      ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/InterproceduralOptimization.cmake)
     _cake_enable_ipo()
   endif()
 
@@ -77,13 +78,8 @@ macro(_cake_local_options)
   endif()
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/CompilerWarnings.cmake)
-  _cake_set_project_warnings(
-    cake_warnings
-    ${_cake_WARNINGS_AS_ERRORS}
-    ""
-    ""
-    ""
-    "")
+  _cake_set_project_warnings(cake_warnings ${_cake_WARNINGS_AS_ERRORS} "" "" ""
+                             "")
 
   if(_cake_ENABLE_USER_LINKER)
     include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/Linker.cmake)
@@ -92,14 +88,12 @@ macro(_cake_local_options)
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/Sanitizers.cmake)
   _cake_enable_sanitizers(
-    cake_options
-    ${_cake_ENABLE_SANITIZER_ADDRESS}
-    ${_cake_ENABLE_SANITIZER_LEAK}
-    ${_cake_ENABLE_SANITIZER_UNDEFINED}
-    ${_cake_ENABLE_SANITIZER_THREAD}
-    ${_cake_ENABLE_SANITIZER_MEMORY})
+    cake_options ${_cake_ENABLE_SANITIZER_ADDRESS}
+    ${_cake_ENABLE_SANITIZER_LEAK} ${_cake_ENABLE_SANITIZER_UNDEFINED}
+    ${_cake_ENABLE_SANITIZER_THREAD} ${_cake_ENABLE_SANITIZER_MEMORY})
 
-  set_target_properties(cake_options PROPERTIES UNITY_BUILD ${_cake_ENABLE_UNITY_BUILD})
+  set_target_properties(cake_options PROPERTIES UNITY_BUILD
+                                                ${_cake_ENABLE_UNITY_BUILD})
 
   if(_cake_ENABLE_CACHE)
     include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/Cache.cmake)

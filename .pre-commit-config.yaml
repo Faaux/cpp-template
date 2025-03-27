@@ -1,17 +1,44 @@
-repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
-  hooks:
-  - id: check-added-large-files
-  - id: end-of-file-fixer
-  - id: trailing-whitespace
-  - id: check-merge-conflict
-  - id: detect-private-key
-  - id: fix-byte-order-marker
-- repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v20.1.0
-  hooks:
-  - id: clang-format
-    args: ["-i", --style=file]
+fail_fast: false
+exclude: |
+  (?x)(
+    ^(.vscode/.*)
+  )
 
-exclude: '(vcpkg)/.*'
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: fix-byte-order-marker
+
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v20.1.0
+    hooks:
+      - id: clang-format
+        args: [-i, --style=file]
+
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.14.0
+    hooks:
+      - id: pretty-format-yaml
+        args:
+          - --autofix
+          - --offset=2
+        exclude: |
+          (?x)(
+            .copier-answers.yml
+          )
+
+# CMake formatting
+  - repo: https://github.com/cheshirekow/cmake-format-precommit
+    rev: v0.6.13
+    hooks:
+      - id: cmake-format
+        additional_dependencies: [pyyaml]
+        types: [file]
+        files: (\.cmake|CMakeLists.txt)(.in)?$
