@@ -36,7 +36,7 @@ function(_vcpkg_chainload_toolchain)
         CACHE INTERNAL "vcpkg chainload")
   else()
     message(
-      WARNING
+      STATUS
         "Could not find toolchain file for ${_chainload_toolchain_name}, skipping chainload"
     )
   endif()

@@ -17,7 +17,7 @@ RUN sudo apt-get -qq update \
 
 RUN wget -q --no-check-certificate https://apt.llvm.org/llvm.sh \
     && chmod +x llvm.sh \
-    && sudo ./llvm.sh 20
+    && sudo ./llvm.sh 20 all
 
 RUN sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-20 10 \
     && sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-20 10 \

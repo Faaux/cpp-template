@@ -6,7 +6,7 @@
       "hidden": true,
       "toolchainFile": "${sourceDir}/cmake/vcpkg/vcpkg.toolchain.cmake",
       "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "x64-foobar",
+        "VCPKG_TARGET_TRIPLET": "x64-{{project_name}}",
         "VCPKG_INSTALL_OPTIONS": "--no-print-usage",
         "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/vcpkg/triplets",
         "VCPKG_OVERLAY_PORTS": "${sourceDir}/cmake/vcpkg/ports"

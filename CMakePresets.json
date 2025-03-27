@@ -56,7 +56,8 @@
       "inherits": [
         "conf-clang-common",
         "conf-debug",
-        "conf-testing"
+        "conf-testing",
+        "conf-modules-experimental"
       ]
     },
     {
@@ -66,7 +67,8 @@
       "inherits": [
         "conf-clang-common",
         "conf-release",
-        "conf-testing"
+        "conf-testing",
+        "conf-modules-experimental"
       ]
     }
   ],
