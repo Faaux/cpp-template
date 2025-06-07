@@ -13,6 +13,10 @@ trim_trailing_whitespace = true
 [*.{yml,yaml,json,toml,jinja,css,js,cmake}]
 indent_size = 2
 
+
+[*.{md}]
+indent_size = 4
+
 [CMakeLists.txt]
 indent_size = 2
 

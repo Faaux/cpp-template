@@ -11,3 +11,7 @@ if(NOT WIN32)
 else()
   message(FATAL_ERROR "Not supported on Windows")
 endif()
+
+if(PORT MATCHES "tbb")
+  set(VCPKG_LIBRARY_LINKAGE dynamic)
+endif()

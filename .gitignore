@@ -34,3 +34,7 @@ ehthumbs.db
 Thumbs.db
 
 *.pdb
+
+.vcpkg/
+.vcpkg_cache/
+.cache/

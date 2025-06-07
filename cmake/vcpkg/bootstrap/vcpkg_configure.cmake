@@ -37,19 +37,16 @@ function(_vcpkg_export_mode)
 endfunction()
 
 macro(detect_vcpkg)
+  # Disabled for now to not use VCPKG which comes with VisualStudio
+  unset(_VCPKG_ROOT CACHE)
+
   # Respect environment variable VCPKG_ROOT and VCPKG_INSTALLATION_ROOT if set
-  if(DEFINED ENV{VCPKG_ROOT} AND NOT "$ENV{VCPKG_ROOT}" STREQUAL "")
-    set(_VCPKG_ROOT
-        "$ENV{VCPKG_ROOT}"
-        CACHE PATH "Vcpkg root directory" FORCE)
-  elseif(DEFINED ENV{VCPKG_INSTALLATION_ROOT}
-         AND NOT "$ENV{VCPKG_INSTALLATION_ROOT}" STREQUAL "")
-    set(_VCPKG_ROOT
-        "$ENV{VCPKG_INSTALLATION_ROOT}"
-        CACHE PATH "Vcpkg root directory" FORCE)
-  else()
-    unset(_VCPKG_ROOT CACHE)
-  endif()
+  # if(DEFINED ENV{VCPKG_ROOT} AND NOT "$ENV{VCPKG_ROOT}" STREQUAL "")
+  # set(_VCPKG_ROOT "$ENV{VCPKG_ROOT}" CACHE PATH "Vcpkg root directory" FORCE)
+  # elseif(DEFINED ENV{VCPKG_INSTALLATION_ROOT} AND NOT
+  # "$ENV{VCPKG_INSTALLATION_ROOT}" STREQUAL "") set(_VCPKG_ROOT
+  # "$ENV{VCPKG_INSTALLATION_ROOT}" CACHE PATH "Vcpkg root directory" FORCE)
+  # else() unset(_VCPKG_ROOT CACHE) endif()
 endmacro()
 
 # Add VCPKG_INSTALL_REPORT_FAILURE option to report vcpkg failure in detail

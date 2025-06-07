@@ -6,3 +6,7 @@ set(VCPKG_LOAD_VCVARS_ENV ON)
 if(NOT WIN32)
   set(VCPKG_CMAKE_SYSTEM_NAME Linux)
 endif()
+
+if(PORT MATCHES "tbb")
+  set(VCPKG_LIBRARY_LINKAGE dynamic)
+endif()

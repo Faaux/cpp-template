@@ -2,6 +2,11 @@ ARG DISTRO_VERSION=24.04
 
 FROM ubuntu:${DISTRO_VERSION}
 
+USER root
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# We ignore this because we can not set specific version for each apt packages
+# hadolint ignore=DL3008
 RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
         software-properties-common wget apt-utils file zip unzip \
@@ -10,7 +15,10 @@ RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
         pkg-config curl \
         python3 python3-pip sudo \
         neovim emacs nano \
-        doxygen graphviz sccache
+        doxygen graphviz sccache \
+        gdb lld \
+        autoconf libtool && \
+    rm -rf /var/lib/apt/lists/*
 
 # Ninja
 ARG NINJA_VERSION=1.12.1
@@ -36,11 +44,13 @@ RUN wget -q --no-check-certificate https://cmake.org/files/v${CMAKE_VERSION%.*}/
 # GCC
 ARG GCC_VERSION=14
 
+# hadolint ignore=DL3008
 RUN add-apt-repository ppa:ubuntu-toolchain-r/ppa -y \
     && apt-get update -qq \
-    && apt-get -qq install -y --no-install-recommends g++-${GCC_VERSION} gcc-${GCC_VERSION} \
-    && update-alternatives --install /usr/bin/gcc gcc $(which gcc-${GCC_VERSION}) 100 \
-    && update-alternatives --install /usr/bin/g++ g++ $(which g++-${GCC_VERSION}) 100
+    && apt-get -qq install -y --no-install-recommends g++-${GCC_VERSION} gcc-${GCC_VERSION} gcc-${GCC_VERSION}-multilib  \
+    && update-alternatives --install /usr/bin/gcc gcc "$(which gcc-${GCC_VERSION})" 100 \
+    && update-alternatives --install /usr/bin/g++ g++ "$(which g++-${GCC_VERSION})" 100 \
+    && rm -rf /var/lib/apt/lists/*
 
 
 # CLANG
@@ -48,13 +58,23 @@ ARG CLANG_VERSION=19
 
 RUN wget -q --no-check-certificate https://apt.llvm.org/llvm.sh \
     && chmod +x llvm.sh \
-    && sudo ./llvm.sh 19 all
+    && ./llvm.sh 19 all
 
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${CLANG_VERSION} 100 \
     && update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${CLANG_VERSION} 100 \
-    && update-alternatives --install /usr/local/bin/ld ld $(which ld.lld-${CLANG_VERSION}) 100 \
-    && update-alternatives --install /usr/local/bin/cc cc $(which clang-${CLANG_VERSION}) 100 \
-    && update-alternatives --install /usr/local/bin/c++ c++ $(which clang++-${CLANG_VERSION}) 100
+    && update-alternatives --install /usr/local/bin/ld ld "$(which ld.lld-${CLANG_VERSION})" 100 \
+    && update-alternatives --install /usr/local/bin/cc cc "$(which clang-${CLANG_VERSION})" 100 \
+    && update-alternatives --install /usr/local/bin/c++ c++ "$(which clang++-${CLANG_VERSION})" 100
+
+# Mold Linker
+ARG MOLD_VERSION=2.38.1
+
+RUN wget -q --no-check-certificate https://github.com/rui314/mold/releases/download/v${MOLD_VERSION}/mold-${MOLD_VERSION}-x86_64-linux.tar.gz \
+    && tar -xzf mold-${MOLD_VERSION}-x86_64-linux.tar.gz \
+       --strip-components 1 \
+       -C /usr/local \
+    && update-alternatives --install /usr/local/bin/ld ld "$(which mold)" 101 \
+    && rm mold-${MOLD_VERSION}-x86_64-linux.tar.gz
 
 # IWYU
 ENV IWYU /home/iwyu
@@ -97,4 +117,10 @@ RUN userdel -r ubuntu \
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
+# UV -> pre-commit
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && source $HOME/.local/bin/env \
+    && uv tool install pre-commit
+
+# Run SSH by default if run manually
 CMD ["sudo", "/usr/sbin/sshd", "-D"]

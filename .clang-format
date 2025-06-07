@@ -1,8 +1,20 @@
 ---
 AccessModifierOffset: -2
 AlignAfterOpenBracket: DontAlign
-AlignConsecutiveAssignments: false
-AlignConsecutiveDeclarations: false
+AlignConsecutiveAssignments:
+  Enabled: false
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: false
+  AlignFunctionPointers: false
+  PadOperators: true
+AlignConsecutiveDeclarations:
+  Enabled: false
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: false
+  AlignFunctionPointers: false
+  PadOperators: true
 AlignEscapedNewlines: Left
 AlignOperands: true
 AlignTrailingComments: false
@@ -38,7 +50,7 @@ BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
 BreakBeforeInheritanceComma: true
 BreakBeforeTernaryOperators: true
-BreakConstructorInitializers: BeforeColon
+BreakConstructorInitializers: BeforeComma
 BreakConstructorInitializersBeforeComma: false
 BreakStringLiterals: true
 ColumnLimit: 100
@@ -78,6 +90,7 @@ NamespaceIndentation: Inner
 ObjCBlockIndentWidth: 7
 ObjCSpaceAfterProperty: true
 ObjCSpaceBeforeProtocolList: false
+PackConstructorInitializers: Never
 PointerAlignment: Right
 ReflowComments: true
 SortIncludes: true

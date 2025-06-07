@@ -9,10 +9,9 @@ x-common-args: &common-args
   USERNAME: ${USERNAME}
   USER_UID: ${USER_UID}
   USER_GID: ${USER_GID}
-  DOCKER_USERNAME: ${DOCKER_USERNAME}
+  MOLD_VERSION: ${MOLD_VERSION}
 
 services:
-    # Base image
   clang_gcc:
     platform: ${PLATFORM}
     build:
@@ -20,6 +19,8 @@ services:
       dockerfile: Dockerfile
       args:
         <<: *common-args
-    image: ${DOCKER_USERNAME}/clang_gcc-ubuntu:${CLANG_VERSION}-${GCC_VERSION}
+    environment:
+      IMAGE_NAME: ${IMAGE_NAME}
+    image: ${IMAGE_NAME}
     container_name: clang_gcc
     tty: true

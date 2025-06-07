@@ -156,11 +156,15 @@ endfunction()
 
 # find root
 function(_vcpkg_find_root cache_dir_name out_vcpkg_root)
-  if("${__vcpkg_bootstrap_host}" STREQUAL "Windows")
-    set(root "$ENV{LOCALAPPDATA}/vcpkg/projects/${cache_dir_name}/cache")
-  else()
-    set(root "$ENV{HOME}/.cache/vcpkg/projects/${cache_dir_name}")
-  endif()
+
+  # Overwrite default behaviour, we want it inside the repository as we
+  # regularly mount it and as such can keep the cache alive for longer
+  set(root "${CMAKE_SOURCE_DIR}/.vcpkg")
+
+  # Old code that uses an OS specific user-local dir
+  # if("${__vcpkg_bootstrap_host}" STREQUAL "Windows") set(root
+  # "$ENV{LOCALAPPDATA}/vcpkg/projects/${cache_dir_name}/cache") else() set(root
+  # "$ENV{HOME}/.cache/vcpkg/projects/${cache_dir_name}") endif()
 
   set(${out_vcpkg_root}
       ${root}

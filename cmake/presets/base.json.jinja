@@ -3,6 +3,11 @@
   "include": [
     "vcpkg.json"
   ],
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 29,
+    "patch": 0
+  },
   "configurePresets": [
     {
       "name": "conf-common",
@@ -16,8 +21,7 @@
       "installDir": "${sourceDir}/out/install/${presetName}",
       "cacheVariables": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "CMAKE_UNITY_BUILD": "ON",
-        "UNITY_BUILD_BATCH_SIZE": "10"
+        "CMAKE_DEBUG_POSTFIX": "d"
       }
     },
     {
@@ -54,6 +58,9 @@
       "description": "Unix-like OS settings for gcc and clang toolchains",
       "hidden": true,
       "inherits": "conf-common",
+      "cacheVariables": {
+        "CMAKE_LINKER_TYPE": "MOLD"
+      },
       "condition": {
         "type": "inList",
         "string": "${hostSystemName}",
@@ -70,15 +77,14 @@
               ".vs",
               ".git",
               "out",
-              "vcpkg"
+              ".vcpkg"
             ]
           },
           "copyOptimizations": {
             "useOptimizations": "RsyncOnly"
           }
         }
-      },
-      "environment": {}
+      }
     },
     {
       "name": "conf-gcc-common",
@@ -128,8 +134,7 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_EXPERIMENTAL_CXX_IMPORT_STD": "0e5b6991-d74f-4b3d-a41c-cf096e0b2508",
-        "CMAKE_CXX_MODULE_STD": "1",
-        "CMAKE_CXX_SCAN_FOR_MODULES": "1"
+        "CMAKE_CXX_MODULE_STD": "1"
       }
     }
   ]

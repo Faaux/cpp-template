@@ -7,6 +7,3 @@ include(cmake/Cake.cmake)
 cake_init()
 
 cake_add_folder(FOLDER code RECURSIVE)
-
-include(cmake/PackageProject.cmake)
-cake_package_project(TARGETS {{project_name}} {{project_name}}Lib cake_options cake_warnings)

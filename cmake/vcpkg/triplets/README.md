@@ -1,6 +1,7 @@
 # Customize vcpkg triplets
 
-This folder applies to the custom vcpkg triplets. These triplets are loaded automatically which can be copied from the `triplets` folder of the vcpkg repository or created from scratch.
+This folder applies to the custom vcpkg triplets. These triplets are loaded automatically which can be copied from the `triplets`
+folder of the vcpkg repository or created from scratch.
 
 For example, to create a custom triplet for Linux x64 with dynamic library linkage:
 
