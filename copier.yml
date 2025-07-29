@@ -1,4 +1,7 @@
-# questions
+#
+# general project questions
+#
+
 project_name:
     type: str
     help: What is your project name?
@@ -7,4 +10,32 @@ version_number:
     type: str
     help: What is your initial version?
     default: 0.0.1
-    
+
+#
+# dev container related questions
+#
+
+devcontainer_use:
+    type: bool
+    help: Do you want to use a dev container?
+    default: true
+
+devcontainer_image:
+    type: str
+    default: "ubuntu:24.04"
+    help: Which image should be used for the dev container?
+    choices:
+        - ubuntu:22.04
+        - ubuntu:24.04
+        - mcr.microsoft.com/devcontainers/base:ubuntu
+        - "{{project_name}}/clang_gcc-ubuntu:24.04"
+        - "custom (I will change that later)"
+    when: "{{ devcontainer_use == true }}"
+
+devcontainer_vscode_extensions:
+    type: yaml
+    help: Which VS Code extensions should be installed at the dev container?
+    default:
+        - ms-vscode.cmake-tools
+        - ms-vscode.cpptools
+    when: "{{ devcontainer_use == true }}"

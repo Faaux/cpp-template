@@ -1,6 +1,6 @@
 {
   "name": "{{project_name}}",
-  "image": "{{project_name}}/clang_gcc-ubuntu:19-14",
+  "image": "{{devcontainer_image}}",
   "capAdd": [
     "SYS_PTRACE"
   ],
@@ -10,7 +10,9 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-vscode.cmake-tools"
+        {%- for ext in devcontainer_vscode_extensions %}
+        "{{ ext }}"{% if not loop.last %},{% endif %}
+        {%- endfor %}
       ]
     }
   },
