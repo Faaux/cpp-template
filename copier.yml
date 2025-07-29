@@ -7,4 +7,8 @@ version_number:
     type: str
     help: What is your initial version?
     default: 0.0.1
-    
+
+cmake_min_version:
+    type: str
+    help: Which CMake version is required at minimum?
+    default: 3.28.0

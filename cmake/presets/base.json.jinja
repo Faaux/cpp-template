@@ -3,10 +3,10 @@
   "include": [
     "vcpkg.json"
   ],
-  "cmakeMinimumRequired": {
-    "major": 3,
-    "minor": 29,
-    "patch": 0
+  {% set cmake_parts = cmake_min_version.split('.') + ['0', '0'] %}"cmakeMinimumRequired": {
+    "major": {{ cmake_parts[0] }},
+    "minor": {{ cmake_parts[1] }},
+    "patch": {{ cmake_parts[2] }}
   },
   "configurePresets": [
     {
